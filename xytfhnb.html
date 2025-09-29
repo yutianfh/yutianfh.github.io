@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>官方页面</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: #333;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        .content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading" id="loadingMsg" style="display: none;"></div>
+    <script>
+        // ==================== 配置区域 ====================
+        // 请在此处直接添加您允许的域名，支持主域名和子域名
+        const whitelist = [
+            "xy11.qyhx.tech",
+            "kefu7899.fun",
+            "3.gkyfrz.top",
+            "xyt.ink",
+            "xy111.agshp.top",
+            "kaliyt.cn",
+        ];
+        // ===============================================
+
+        const loadingMsg = document.getElementById('loadingMsg');
+
+        function isDomainAllowed(domain, allowedList) {
+            return allowedList.some(allowedDomain =>
+                domain === allowedDomain || domain.endsWith('.' + allowedDomain)
+            );
+        }
+
+        function main() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const encodedParam = urlParams.get('safe');
+
+                if (!encodedParam) {
+                    window.location.href = 'https://www.baidu.com';
+                    return;
+                }
+
+                const tureurl = atob(encodedParam);
+                if (!tureurl.startsWith('http')) {
+                    throw new Error("URL格式错误，必须以http/https开头");
+                }
+                
+                const domain = new URL(tureurl).hostname;
+
+                if (!isDomainAllowed(domain, whitelist)) {
+                    throw new Error("该域名未被授权联系下雨天授权@hxzc1473");
+                }
+
+                const iframe = document.createElement('iframe');
+                iframe.className = 'content';
+                iframe.src = tureurl;
+                document.body.appendChild(iframe);
+
+            } catch (error) {
+                loadingMsg.style.display = 'block';
+                loadingMsg.textContent = `操你妈逼 ${error.message}`;
+                loadingMsg.style.color = "#ff4444";
+            }
+        }
+
+        main();
+    </script>
+</body>
+
+</html>
